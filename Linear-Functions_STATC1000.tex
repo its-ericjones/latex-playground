@@ -1,0 +1,375 @@
+\documentclass{article}   
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage[margin=1in, top=0.8in]{geometry}
+\usepackage{pgfplots} 
+\usepackage{pgfplotstable}
+\usepackage{titling}
+
+\pgfplotsset{compat=1.18} 
+
+
+\setlength{\droptitle}{-6em}               
+\title{Linear Regressions}  
+\author{Eric Jones}      
+\date{September 3, 2025}      
+
+\begin{document}    
+
+\maketitle                   
+
+%%%%%%%%%% Page 1 %%%%%%%%%%
+\section{Review: Slope-intercept Form}      
+Slope-intercept form is the equation of a straight line written as \(y = mx + b\) where \(x\) represents the line's slope and \(b\) represents the y-intercept.
+
+\subsection{Examples of Slope-Intercept and Solving for Y}
+Example 1 (the given equation is already in the correct format):
+\[y = 3x + 7\]
+\vspace{-1.5em}
+\[\text{slope = $3$}\]
+\vspace{-1.5em}
+\[\text{y-intercept = $7$}\]
+\vspace{1em}
+\noindent Example 2 (we need to solve for $y$):
+\[
+\begin{aligned}
+3x + 4y &= 5 \\
+4y &= 5 - 3x \\
+y &= \frac{5 - 3x}{4} \\
+y &= \frac{-3x}{4} + \frac{5}{4}
+\end{aligned}
+\]
+\vspace{-0.5em}
+\vspace{0.5em}
+\[\text{slope = $\frac{-3}{4}$}\]
+\vspace{-1em}
+\[\text{y-intercept = $\frac{5}{4}$}\]
+\vfill
+\begin{center}
+       (Continues on next page.)
+\end{center}
+
+%%%%%%%%%% Page 2 %%%%%%%%%%
+\newpage
+\section{Paired Data}
+A data set where each inidividual is described by two variables.
+
+\noindent You can visualize paired data with a scatter chart.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    title={Scatter Plot},
+    grid=both,
+    width=8cm,
+    height=6cm,
+    xtick=\empty,
+    ytick=\empty,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=X,
+    y=Y
+] {basic_scatter_plot.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Scatter plots help us:
+\begin{itemize}
+       \item Identify if the data has a trend or pattern
+       \item Identify if two variables are \emph{correlated} or not
+       \item Make predictions
+\end{itemize}
+
+\subsection{Strong Correlation Example}
+%% Height vs Shoe Size Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis} [
+       xlabel={Shoe Size},
+       ylabel={Height},
+       title={Height vs. Shoe Size},
+       width=12cm,
+       height=8cm,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=ShoeSize,
+    y=Height
+] {shoesize_height.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=ShoeSize,
+    y=Height,
+    y={create col/linear regression={y=Height}}
+] {shoesize_height.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item There is a \emph{strong correlation} between height and shoe size
+       \item This allows us to make a prediction of somebody's height based on their shoe size
+\end{itemize}
+\vfill
+\begin{center}
+       (Continues on next page.)
+\end{center}
+
+%%%%%%%%%% Page 3 %%%%%%%%%%
+\newpage
+\subsection{Weak or No Correlation Example}
+%% Age vs Height Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis} [
+       xlabel={Age},
+       ylabel={Height},
+       title={Height vs. Age},
+       width=12cm,
+       height=8cm,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=Age,
+    y=Height
+] {age_height.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=Age,
+    y=Height,
+    y={create col/linear regression={y=Height}}
+] {age_height.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item There is either a \emph{weak correlation} or \emph{no correlation }between height and age
+       \item The age variable does not seem to influence the height variable
+\end{itemize}
+
+\section{Types of Relationships in Paired Data}
+\subsection{Positive Linear Correlation}
+%% Positive Linear Correlation - Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    title={Positive Linear Correlation},
+    grid=both,
+    width=8cm,
+    height=6cm,
+    xtick=\empty,
+    ytick=\empty,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=X,
+    y=Y
+] {positive_linear_correlation.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=X,
+    y=Y,
+    y={create col/linear regression={y=Y}}
+] {positive_linear_correlation.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item The data has a clear linear shape
+       \item The slope of the line is \emph{positive}
+\end{itemize}
+\vfill
+\begin{center}
+       (Continues on next page.)
+\end{center}
+
+%%%%%%%%%% Page 4 %%%%%%%%%%
+\newpage
+\subsection{Negative Linear Correlation}
+%% Negative Linear Correlation - Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    title={Negative Linear Correlation},
+    grid=both,
+    width=8cm,
+    height=6cm,
+    xtick=\empty,
+    ytick=\empty,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=X,
+    y=Y
+] {negative_linear_correlation.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=X,
+    y=Y,
+    y={create col/linear regression={y=Y}}
+] {negative_linear_correlation.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item The data has a clear linear shape
+       \item The slope of the line is \emph{negative}
+\end{itemize}
+
+\subsection{Non Linear Correlation}
+%% Non Linear Correlation - Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    title={Non Linear Correlation},
+    grid=both,
+    width=8cm,
+    height=6cm,
+    xtick=\empty,
+    ytick=\empty,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=X,
+    y=Y
+] {non_linear_correlation.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=X,
+    y=Y,
+    y={create col/linear regression={y=Y}}
+] {non_linear_correlation.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item While data is following a pattern (in this case exponential), it is not a straight line
+\end{itemize}
+\vfill
+\begin{center}
+       (Continues on next page.)
+\end{center}
+
+%%%%%%%%%% Page 5 %%%%%%%%%%
+\newpage
+\subsection{Weak or No Linear Correlation}
+%% Weak or No Linear Correlation - Scatter Plot
+% Graph Outline
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    title={Weak or No Linear Correlation},
+    grid=both,
+    width=8cm,
+    height=6cm,
+    xtick=\empty,
+    ytick=\empty,
+]
+% Scatter Points
+\addplot[
+    only marks,
+    mark=*,
+] table[
+    col sep=comma,
+    x=X,
+    y=Y
+] {weak_linear_correlation.csv};
+% Regression Line
+\addplot[
+    red,
+    thick,
+    opacity=0.4
+] table[
+    col sep=comma,
+    x=X,
+    y=Y,
+    y={create col/linear regression={y=Y}}
+] {weak_linear_correlation.csv};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+When we analyze this scatter plot, we can see:
+\begin{itemize}
+       \item The data has no clear pattern (a diffuse cloud)
+\end{itemize}
+
+
+
+
+\end{document}               
